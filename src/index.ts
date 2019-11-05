@@ -24,14 +24,24 @@ function onLoaded(): void {
   const url = new URL(document.location.href);
   const param = parseQueryParam(url.search);
   const gui = new dat.GUI();
+  const labels = Object.keys(tests);
 
-  addRadioGroupOnGUI(
+  const folder = addRadioGroupOnGUI(
     gui.addFolder("Tests"),
-    Object.keys(tests),
+    labels,
     onTestChange(tests, gui),
     param.case
   );
+
+  if (!param.case) {
+    folder.open();
+  } else {
+    const include = labels
+      .map(label => label.toLocaleLowerCase())
+      .includes(param.case.toLowerCase());
+
+    if (!include) folder.open();
+  }
 }
 
 window.addEventListener("load", onLoaded);
-window.addEventListener("changetest", () => console.log());
