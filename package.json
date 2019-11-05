@@ -4,7 +4,8 @@
   "description": "testbed projects",
   "main": "index.js",
   "scripts": {
-    "start": "parcel",
+    "start-index": "parcel src/index.html",
+    "start-test": "parcel src/test.index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +19,14 @@
   },
   "homepage": "https://github.com/dnvy0084/testbed#readme",
   "devDependencies": {
+    "@types/dat.gui": "^0.7.5",
+    "dat.gui": "^0.7.6",
     "parcel": "^1.12.4",
+    "parcel-bundler": "^1.12.4",
     "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "src": "^1.1.2",
+    "utils": "^0.3.1"
   }
 }

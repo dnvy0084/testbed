@@ -1,11 +1,37 @@
-import A from "./test/A";
+import dat from "dat.gui";
+import { parseQueryParam } from "./utils/string";
+import { addRadioGroupOnGUI } from "./utils/datgui";
+import tests, { TestDef } from "./tests";
+import Test from "./tests/Test";
 
-let t: string = "";
+function onTestChange(
+  testlist: Record<string, TestDef>,
+  gui: dat.GUI
+): (key: string) => void {
+  let testcase: Test | null = null;
 
-t = "hello, world! @";
+  return function(key: string): void {
+    if (testcase) {
+      testcase.dispose(gui);
+    }
 
-console.log(t);
+    testcase = new testlist[key]();
+    testcase.start(gui);
+  };
+}
 
-const a = new A();
+function onLoaded(): void {
+  const url = new URL(document.location.href);
+  const param = parseQueryParam(url.search);
+  const gui = new dat.GUI();
 
-a.test();
+  addRadioGroupOnGUI(
+    gui.addFolder("Tests"),
+    Object.keys(tests),
+    onTestChange(tests, gui),
+    param.case
+  );
+}
+
+window.addEventListener("load", onLoaded);
+window.addEventListener("changetest", () => console.log());
