@@ -1,6 +1,6 @@
-import Test from "./Test";
+import TestBase from "./TestBase";
 
-export default class TestA extends Test {
+export default class TestA extends TestBase {
   protected testDidStart(): void {
     console.log("started", this.name);
   }

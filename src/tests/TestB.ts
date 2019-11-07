@@ -1,4 +1,4 @@
-import Test from "./Test";
+import TestBase from "./TestBase";
 import { addRadioGroupOnGUI } from "../utils/datgui";
 
 const html = `
@@ -12,7 +12,7 @@ const style = `
   }
 `;
 
-export default class TestB extends Test {
+export default class TestB extends TestBase {
   public a: string = "property a";
   public b: boolean = true;
   public c: number = 5;

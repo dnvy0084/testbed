@@ -1,4 +1,4 @@
-export default class Test {
+export default class TestBase {
   protected folder: dat.GUI | null = null;
 
   private caseContainer: HTMLDivElement | null = null;

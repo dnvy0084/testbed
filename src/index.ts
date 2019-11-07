@@ -2,7 +2,7 @@ import dat from "dat.gui";
 import { parseQueryParam } from "./utils/string";
 import { addRadioGroupOnGUI } from "./utils/datgui";
 import tests, { TestDef } from "./tests";
-import Test from "./tests/Test";
+import Test from "./tests/TestBase";
 
 function onTestChange(
   testlist: Record<string, TestDef>,

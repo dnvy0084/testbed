@@ -4,8 +4,7 @@
   "description": "testbed projects",
   "main": "index.js",
   "scripts": {
-    "start-index": "parcel src/index.html",
-    "start-test": "parcel src/test.index.html",
+    "start": "parcel serve src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
