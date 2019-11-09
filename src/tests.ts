@@ -1,14 +1,12 @@
-import TestA from "./tests/TestA";
-import TestB from "./tests/TestB";
 import TestBase from "./tests/TestBase";
 import WebGLBase from "./tests/webgl/WebGLBase";
+import FragCoordTest from "./tests/webgl/FragCoordTest";
 
 export interface TestDef {
   new (): TestBase;
 }
 
 export default {
-  TestA,
-  TestB,
-  WebGLBase
+  WebGLBase,
+  FragCoordTest
 };

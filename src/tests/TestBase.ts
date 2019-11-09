@@ -6,6 +6,11 @@ export default class TestBase {
   public start(gui: dat.GUI): void {
     this.folder = gui.addFolder(this.name);
     this.folder.open();
+
+    if (this.innerHTML) {
+      this.layout(this.innerHTML, ...(this.styles || []));
+    }
+
     this.testDidStart();
   }
 
@@ -64,5 +69,13 @@ export default class TestBase {
 
   public get name(): string {
     return this.constructor.name;
+  }
+
+  public get innerHTML(): string {
+    return "";
+  }
+
+  public get styles(): string[] | null {
+    return null;
   }
 }

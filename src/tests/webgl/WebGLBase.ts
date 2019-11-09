@@ -1,26 +1,5 @@
 import TestBase from "../TestBase";
-
-const style = `
-  body {
-    padding: 0px;
-    margin: 0px;
-  }
-
-  .fit-screen {
-    width: 100%;
-    height: 100%;
-  }
-
-  #view {
-    border: 1px solid black;
-  }
-`;
-
-const html = `
-  <div class="test-wrapper">
-    <canvas id="view" class="fit-screen"></canvas>
-  </div>
-`;
+import { createProgram } from "./glu/glu";
 
 const vertexSource = `
 attribute vec2 pos;
@@ -34,62 +13,28 @@ const fragmentSource = `
 precision mediump float;
 
 void main() {
-  gl_FragColor = vec4(0.8, 0.0, 0.0, 1.0);
+  gl_FragColor = vec4(0.0, 0.8, 1.0, 1.0);
 }
 `;
 
-function createProgram(
-  gl: WebGLRenderingContext,
-  vertexSource: string,
-  fragmentSource: string
-): WebGLProgram {
-  const program = gl.createProgram() as WebGLProgram;
-  const tuple: [number, string][] = [
-    [gl.VERTEX_SHADER, vertexSource],
-    [gl.FRAGMENT_SHADER, fragmentSource]
-  ];
-
-  for (const [type, source] of tuple) {
-    const shader = createShader(gl, type, source);
-
-    gl.attachShader(program, shader);
-  }
-
-  gl.linkProgram(program);
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.warn(gl.getProgramInfoLog(program));
-  }
-
-  return program;
-}
-
-function createShader(
-  gl: WebGLRenderingContext,
-  type: number,
-  source: string
-): WebGLShader {
-  const shader = gl.createShader(type) as WebGLShader;
-
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.warn(gl.getShaderInfoLog(shader));
-  }
-
-  return shader;
-}
-
 export default class WebGLBase extends TestBase {
-  private gl: WebGLRenderingContext;
+  protected canvas: HTMLCanvasElement;
+  protected gl: WebGLRenderingContext;
+  protected program: WebGLProgram;
+  protected basicVertexSource: string = vertexSource;
+  protected basicFragmentSource: string = fragmentSource;
+
+  protected initGL(): void {
+    this.canvas = document.querySelector("#view") as HTMLCanvasElement;
+    this.gl = this.canvas.getContext("webgl") as WebGLRenderingContext;
+
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+  }
 
   protected testDidStart(): void {
-    this.layout(html, style);
-
-    const canvas = document.querySelector("#view") as HTMLCanvasElement;
-
-    this.gl = canvas.getContext("webgl") as WebGLRenderingContext;
+    this.initGL();
 
     const program: WebGLProgram = createProgram(
       this.gl,
@@ -127,5 +72,35 @@ export default class WebGLBase extends TestBase {
 
     this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuf);
     this.gl.drawElements(this.gl.TRIANGLES, 6, this.gl.UNSIGNED_SHORT, 0);
+  }
+
+  protected testWillDispose(): void {
+    if (this.gl) {
+      this.gl.useProgram(null);
+    }
+  }
+
+  public get innerHTML(): string {
+    return `
+    <div class="test-wrapper">
+      <canvas id="view" class="fit-screen"></canvas>
+    </div>
+  `;
+  }
+
+  public get styles(): string[] | null {
+    return [
+      `
+      body {
+        padding: 0px;
+        margin: 0px;
+      }
+    
+      .fit-screen {
+        width: 100%;
+        height: 100%;
+      }
+    `
+    ];
   }
 }
