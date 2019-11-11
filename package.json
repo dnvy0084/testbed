@@ -19,9 +19,11 @@
   "homepage": "https://github.com/dnvy0084/testbed#readme",
   "devDependencies": {
     "@types/dat.gui": "^0.7.5",
+    "@types/redux": "^3.6.0",
     "dat.gui": "^0.7.6",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
+    "redux": "^4.0.4",
     "typescript": "^3.6.4"
   },
   "dependencies": {
