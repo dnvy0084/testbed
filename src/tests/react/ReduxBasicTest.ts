@@ -1,5 +1,13 @@
 import TestBase from "../TestBase";
-import { createStore, combineReducers, bindActionCreators } from "redux";
+import {
+  createStore,
+  combineReducers,
+  bindActionCreators,
+  applyMiddleware,
+  MiddlewareAPI,
+  Dispatch,
+  AnyAction
+} from "redux";
 
 interface State {
   a: number;
@@ -85,8 +93,50 @@ function reducer(state: State = initialState, action: Action): State {
   return state;
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise(function(resolve): void {
+    setTimeout(resolve, ms);
+  });
+}
+
+function asyncDispatch({
+  getState
+}: MiddlewareAPI): (next: Dispatch) => (action: AnyAction) => AnyAction {
+  return function(next: Dispatch): any {
+    return async function(action: Action): Promise<any> {
+      console.log("will dispatch", action);
+
+      await delay(500);
+      const result = next(action);
+
+      console.log("state after dispath", getState());
+
+      return result;
+    };
+  };
+}
+
+function minUntil(n: number): any {
+  return function({ getState }: MiddlewareAPI) {
+    return function(next: Dispatch) {
+      return function(action: Action) {
+        if (action.type !== "A") return action;
+
+        const copy = { ...action };
+
+        if (copy.payload > n) copy.payload = 0;
+
+        return next(copy);
+      };
+    };
+  };
+}
+
 const reducers = { a, b, c };
-const store = createStore(combineReducers(reducers), initialState);
+const store = createStore(
+  combineReducers(reducers),
+  applyMiddleware(asyncDispatch, minUntil(5))
+);
 
 const bounded = bindActionCreators(
   {
