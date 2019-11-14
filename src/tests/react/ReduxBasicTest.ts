@@ -106,7 +106,7 @@ function asyncDispatch({
     return async function(action: Action): Promise<any> {
       console.log("will dispatch", action);
 
-      await delay(500);
+      await delay(10);
       const result = next(action);
 
       console.log("state after dispath", getState());

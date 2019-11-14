@@ -106,7 +106,7 @@ export default class FragCoordTest extends WebGLBase {
         break;
     }
   };
-  private index = 0;
+
   private onMouseMove = (e: MouseEvent): void => {
     const f = e.offsetX / this.canvas.width;
 

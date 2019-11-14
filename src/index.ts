@@ -3,6 +3,13 @@ import { parseQueryParam } from "./utils/string";
 import { addRadioGroupOnGUI } from "./utils/datgui";
 import tests, { TestDef } from "./tests";
 import Test from "./tests/TestBase";
+import TestBase from "./tests/TestBase";
+
+declare global {
+  interface Window {
+    app: TestBase;
+  }
+}
 
 function onTestChange(
   testlist: Record<string, TestDef>,
@@ -17,6 +24,7 @@ function onTestChange(
 
     testcase = new testlist[key]();
     testcase.start(gui);
+    window.app = testcase;
   };
 }
 
